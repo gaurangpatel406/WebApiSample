@@ -1,0 +1,38 @@
+GET https://localhost:7241/api/Profile
+###
+
+GET https://localhost:7241/api/Profile/5
+
+###
+
+POST https://localhost:7241/api/Profile
+Content-Type: application/json
+
+{
+  "id": 2,
+  "name": "2nd "
+}
+###
+POST https://localhost:7241/api/Profile
+Content-Type: application/json
+
+{
+  "id": 3,
+  "name": "3rd"
+}
+###
+POST https://localhost:7241/api/Profile
+Content-Type: application/json
+
+{
+  "id": 4,
+  "name": "4th"
+}
+###
+POST https://localhost:7241/api/Profile
+Content-Type: application/json
+
+{
+  "id": 5,
+  "name": "5th"
+}
