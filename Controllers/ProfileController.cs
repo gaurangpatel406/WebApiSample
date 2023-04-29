@@ -33,6 +33,14 @@ namespace Class2WebApi.Controllers
         [HttpPost]
         public ActionResult Post(Profile profile)  //create - The profile var is bound to the body of the request
         {
+            if (_profiles.Any(p=>p.Id==profile.Id))
+            {
+                return Conflict($"A profile with same Id # ({profile.Id}) exists");
+            }
+            if (string.IsNullOrEmpty(profile.Name))
+            {
+                return BadRequest("The name cannot be empty");
+            }
             _profiles.Add(profile);
             //return ok();
             return Created($"api/profiles/{profile.Id}", profile);
