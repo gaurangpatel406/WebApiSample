@@ -1,4 +1,7 @@
+using Class2WebApi.InMemoryDatabase;
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddSingleton<IDatabase, inMemoryDB>(); //add services 
 
 // Add services to the container.
 

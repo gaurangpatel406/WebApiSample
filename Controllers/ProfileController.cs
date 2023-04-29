@@ -11,8 +11,8 @@ namespace Class2WebApi.Controllers
     [ApiController]
     public class ProfileController : ControllerBase
     {
-       private inMemoryDB _db;
-        public ProfileController(inMemoryDB db)
+       private IDatabase _db;
+        public ProfileController(IDatabase db)
         {
             _db = db;
         }
