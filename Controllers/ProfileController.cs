@@ -1,4 +1,5 @@
-﻿using Class2WebApi.Models;
+﻿using Class2WebApi.InMemoryDatabase;
+using Class2WebApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography.X509Certificates;
@@ -9,8 +10,13 @@ namespace Class2WebApi.Controllers
     [ApiController]
     public class ProfileController : ControllerBase
     {
-        private static readonly List<Profile> _profiles = new List<Profile>();
-        
+       private inMemoryDB _db;
+        public ProfileController(inMemoryDB db)
+        {
+            _db = db;
+        }
+
+
         [HttpGet]
         public  ActionResult<Profile> Get() //Read everrything
         {
