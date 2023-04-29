@@ -1,4 +1,5 @@
-﻿using Class2WebApi.InMemoryDatabase;
+﻿using Class2WebApi.Exceptions;
+using Class2WebApi.InMemoryDatabase;
 using Class2WebApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ namespace Class2WebApi.Controllers
         [HttpGet]
         public  ActionResult<Profile> Get() //Read everrything
         {
-            return Ok(_profiles);
+            return Ok(_db.Get());
 
         }
         [HttpGet,Route("{id}")] //api/profiles/{id}
@@ -29,50 +30,65 @@ namespace Class2WebApi.Controllers
         //[HttpGet("{Id}"]
         public ActionResult GetAction(int id)
         {
-            var profile=_profiles.FirstOrDefault(p => p.Id == id);
-            if(profile == null)
+            
+            try
+            {
+                var profile = _db.Get(id);
+                return Ok(profile);
+            }
+            catch(NotFoundException)
             {
                 return NotFound();
             }
-            return Ok(profile);
         }
         [HttpPost]
         public ActionResult Post(Profile profile)  //create - The profile var is bound to the body of the request
         {
-            if (_profiles.Any(p=>p.Id==profile.Id))
+            try
             {
-                return Conflict($"A profile with same Id # ({profile.Id}) exists");
+                _db.Create(profile);
+                //return ok();
+
+                return Created($"api/profiles/{profile.Id}", profile);
             }
-            if (string.IsNullOrEmpty(profile.Name))
+            catch (DuplicateException)
             {
-                return BadRequest("The name cannot be empty");
+                return Conflict();
             }
-            _profiles.Add(profile);
-            //return ok();
-            return Created($"api/profiles/{profile.Id}", profile);
+            catch(InvalidObjectException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         [HttpPut]
         public ActionResult update(Profile profile)
         {
-            var currentProfile = _profiles.FirstOrDefault(p => p.Id == profile.Id);
-            if(currentProfile == null)
+            
+            try
+            {
+                _db.Update(profile);
+                return Ok();
+            }
+            catch (NotFoundException)
             {
                 return NotFound();
 
             }
-            currentProfile.Name = profile.Name;
-            return Ok();
         }
         [HttpDelete]//, Route("{id}")] //can user query parameter ?Id=3 in VS code delete if dont want to add route to delete action
         public ActionResult Delete(int id)
         {
-            var profileToDelete =_profiles.FirstOrDefault(p => p.Id == id);
-            if (profileToDelete == null)
+           
+            try
+            {
+                _db.Delete(id);
+                return Ok();
+            }
+            catch (NotFoundException)
             {
                 return NotFound();
             }
-            _profiles.Remove(profileToDelete);
-            return Ok();
+            
 
         }
     }

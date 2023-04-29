@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Server.IIS.Core;
 
 namespace Class2WebApi.InMemoryDatabase
 {
-    public class inMemoryDB
+    public class inMemoryDB : IDatabase
     {
 
         private readonly List<Profile> _profiles = new List<Profile>();
@@ -22,8 +22,8 @@ namespace Class2WebApi.InMemoryDatabase
             _profiles.Add(profile);
 
         }
-        public IEnumerable<Profile> Get() 
-        { 
+        public IEnumerable<Profile> Get()
+        {
             return _profiles;
         }
         public void Update(Profile profile)
@@ -43,7 +43,7 @@ namespace Class2WebApi.InMemoryDatabase
                 throw new NotFoundException("Not Found");
             }
             _profiles.Remove(profileToDelete);
-            
+
         }
 
         public Profile Get(int id)
