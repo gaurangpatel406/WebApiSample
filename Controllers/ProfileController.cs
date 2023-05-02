@@ -3,6 +3,7 @@ using Class2WebApi.InMemoryDatabase;
 using Class2WebApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData.Query;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Class2WebApi.Controllers
@@ -17,8 +18,9 @@ namespace Class2WebApi.Controllers
             _db = db;
         }
 
-
+        
         [HttpGet]
+        [EnableQuery]
         public  ActionResult<Profile> Get() //Read everrything
         {
             return Ok(_db.Get());
